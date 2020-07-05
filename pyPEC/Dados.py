@@ -25,6 +25,7 @@ class Dados:
         self.check_id = check_id
         self.controle_id = controle_id
         
+    
     def ler_arquivo(self):
         arquivo = open(self.FILE_PATH, 'r')
         disc_e_residuos = []
@@ -72,8 +73,7 @@ class Dados:
                 ponto[3] *= 100 #converte para centimetros
         
         
-    def analise_de_tendencia_discrepancias(self):
-        
+    def analise_de_tendencia_discrepancias(self):        
         media_X = (sum([linha[1] for linha in self.discrepancias_pontos_check]) /
                    len([linha[1] for linha in self.discrepancias_pontos_check]))
         
@@ -97,15 +97,7 @@ class Dados:
         
         return [t_calc_X, t_calc_Y, t_calc_Z]
         
-    """def get_discrepancias_pontos_check():
-        return discrepancias_pontos_check
-    
-    def get_residuos_pontos_controle():
-        return residuos_pontos_controle
-    
-    def calcular_valor_t():
-        pass
-    
+    """    
     def calcular_desvio_padrao_amostral():
         pass
     
@@ -121,9 +113,29 @@ class Dados:
                  len([linha[2] for linha in self.discrepancias_pontos_check])))
         
         self.EQM_planimetrico = math.sqrt(EQM_x**2 + EQM_y**2)
-    
-    def calcular_acuracia_planimetrica(self, prob=90):
         
+    
+    def analise_de_precisao(self, EP):
+        
+        variancia_PEC = EP / (math.sqrt(2))
+        n = len(self.discrepancias_pontos_check)
+        variancia_amostral_X = statistics.variance([linha[1] for linha in self.discrepancias_pontos_check])
+        variancia_amostral_Y = statistics.variance([linha[2] for linha in self.discrepancias_pontos_check])
+        variancia_amostral_Z = statistics.variance([linha[3] for linha in self.discrepancias_pontos_check])
+        
+        print('Variancia X: ', variancia_amostral_X)
+        print('Variancia Y: ', variancia_amostral_Y)
+        print('Variancia Z: ', variancia_amostral_Z)
+        
+        qui_quadrado_X = ((n-1) * variancia_amostral_X) / variancia_PEC
+        qui_quadrado_Y = ((n-1) * variancia_amostral_Y) / variancia_PEC
+        qui_quadrado_Z = ((n-1) * variancia_amostral_Z) / variancia_PEC
+        
+        return [qui_quadrado_X, qui_quadrado_Y, qui_quadrado_Z]
+        
+    
+    
+    def calcular_acuracia_planimetrica(self, prob=90):        
         if self.EQM_planimetrico == 0:
             self.calcular_erro_medio_quadratico_plan()
             print('EQM plan.: ', self.EQM_planimetrico)
