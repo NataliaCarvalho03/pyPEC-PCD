@@ -5,4 +5,5 @@ Este projeto ainda está em desenvolvimento e podem haver erros. Sinta-se a vont
 
 Funcionalidades prontas:
 
-- Análise de Têndencia das Discrepâncias Planialtimétricas
+- Análise de Têndencia das Discrepâncias Planialtimétricas com teste t-Student
+- Análise de Precisão com Teste Qui-Quadrado
