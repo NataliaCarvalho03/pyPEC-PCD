@@ -9,7 +9,6 @@ Created on Sat Jul  4 12:41:57 2020
 import math
 import statistics
 
-
 class Dados:
     
     discrepancias_pontos_check  = []
@@ -17,6 +16,8 @@ class Dados:
 
     
     EQM_planimetrico = 0
+    desvio_amostral = []
+    media_aritmetica = []
     
     def __init__(self, FILE_PATH, colunas, linhas_a_ignorar, check_id, controle_id):
         self.FILE_PATH = FILE_PATH #caminho para o arquivo contendo os dados de precisão e acurácia
@@ -97,12 +98,22 @@ class Dados:
         
         return [t_calc_X, t_calc_Y, t_calc_Z]
         
-    """    
-    def calcular_desvio_padrao_amostral():
-        pass
+  
+    def calcular_desvio_padrao_amostral(self):
+        
+        stdev_x = statistics.stdev([l[1] for l in self.discrepancias_pontos_check])
+        stdev_y = statistics.stdev([l[2] for l in self.discrepancias_pontos_check])
+        stdev_z = statistics.stdev([l[3] for l in self.discrepancias_pontos_check])
+        
+        self.desvio_amostral = [stdev_x, stdev_y, stdev_z]
     
-    def calcular_media_discrepancias():
-        pass"""
+    def calcular_media_discrepancias(self):
+        
+        media_x = statistics.mean([l[1] for l in self.discrepancias_pontos_check])
+        media_y = statistics.mean([l[2] for l in self.discrepancias_pontos_check])
+        media_z = statistics.mean([l[3] for l in self.discrepancias_pontos_check])
+        
+        self.media_aritmetica = [media_x, media_y, media_z]
     
     def calcular_erro_medio_quadratico_plan(self):
         
@@ -134,7 +145,6 @@ class Dados:
         return [qui_quadrado_X, qui_quadrado_Y, qui_quadrado_Z]
         
     
-    
     def calcular_acuracia_planimetrica(self, prob=90):        
         if self.EQM_planimetrico == 0:
             self.calcular_erro_medio_quadratico_plan()
@@ -146,4 +156,45 @@ class Dados:
             acuracia = 1.96 * self.EQM_planimetrico
         
         return acuracia
+    
+    
+    def gerar_graficos_tendencia_planimetrica(self, CAMINHO_ARQUIVO_GRAFICO):
+        
+        import matplotlib.pyplot as plt
+        import numpy as np
+        #rom matplotlib.pyplot import figure
+        
+        plt.figure(figsize=(4,4))
+        plt.title("Discrepâncias nos Pontos de Verificação", y=1.02)
+        for i in range(len(self.discrepancias_pontos_check)):
+            plt.scatter(self.discrepancias_pontos_check[i][1], self.discrepancias_pontos_check[i][2], color="blue")
+            plt.text(self.discrepancias_pontos_check[i][1] * (1 + 0.01), self.discrepancias_pontos_check[i][2] * (1 + 0.01) , self.discrepancias_pontos_check[i][0], fontsize=8)
+        #plt.scatter(x_residual, y_residual, color="blue")
+        plt.scatter(statistics.mean([l[1] for l in self.discrepancias_pontos_check]), 
+                     statistics.mean([l[2] for l in self.discrepancias_pontos_check]), 
+                      color="red")
+        plt.xlabel("Discrepância em X (cm)", labelpad=2)
+        plt.ylabel("Discrepância em Y (cm)", labelpad=2)
+        plt.grid()
+        plt.tick_params(pad=3)
+        plt.savefig(CAMINHO_ARQUIVO_GRAFICO, dpi=300, bbox_inches = "tight")
+        plt.show()
+        
+    def gerar_grafico_tendencia_altimetrica(self, CAMINHO_ARQUIVO_GRAFICO):
+        
+        import matplotlib.pyplot as plt
+        import numpy as np
+        
+        objects = tuple([l[0] for l in self.discrepancias_pontos_check])
+        y_pos = np.arange(len(objects))
+        
+        plt.figure(figsize=(4, 4)) 
+        plt.bar(y_pos, [l[3] for l in self.discrepancias_pontos_check], align='center', alpha=1.0, width=0.8)
+        plt.xticks(y_pos, objects, fontsize=9, rotation=90)
+        plt.grid(axis='y')
+        plt.ylabel('Discrepância (cm)', labelpad=2)
+        plt.title('Discrepâncias Altimétricas')
+        plt.savefig(CAMINHO_ARQUIVO_GRAFICO, dpi=300, bbox_inches = "tight")
+        plt.show()
+    
         
