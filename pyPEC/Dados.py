@@ -3,7 +3,7 @@
 """
 Created on Sat Jul  4 12:41:57 2020
 
-@author: natalia
+@author: Natalia C. de Amorim
 """
 
 import math
@@ -156,45 +156,5 @@ class Dados:
             acuracia = 1.96 * self.EQM_planimetrico
         
         return acuracia
-    
-    
-    def gerar_graficos_tendencia_planimetrica(self, CAMINHO_ARQUIVO_GRAFICO):
-        
-        import matplotlib.pyplot as plt
-        import numpy as np
-        #rom matplotlib.pyplot import figure
-        
-        plt.figure(figsize=(4,4))
-        plt.title("Discrepâncias nos Pontos de Verificação", y=1.02)
-        for i in range(len(self.discrepancias_pontos_check)):
-            plt.scatter(self.discrepancias_pontos_check[i][1], self.discrepancias_pontos_check[i][2], color="blue")
-            plt.text(self.discrepancias_pontos_check[i][1] * (1 + 0.01), self.discrepancias_pontos_check[i][2] * (1 + 0.01) , self.discrepancias_pontos_check[i][0], fontsize=8)
-        #plt.scatter(x_residual, y_residual, color="blue")
-        plt.scatter(statistics.mean([l[1] for l in self.discrepancias_pontos_check]), 
-                     statistics.mean([l[2] for l in self.discrepancias_pontos_check]), 
-                      color="red")
-        plt.xlabel("Discrepância em X (cm)", labelpad=2)
-        plt.ylabel("Discrepância em Y (cm)", labelpad=2)
-        plt.grid()
-        plt.tick_params(pad=3)
-        plt.savefig(CAMINHO_ARQUIVO_GRAFICO, dpi=300, bbox_inches = "tight")
-        plt.show()
-        
-    def gerar_grafico_tendencia_altimetrica(self, CAMINHO_ARQUIVO_GRAFICO):
-        
-        import matplotlib.pyplot as plt
-        import numpy as np
-        
-        objects = tuple([l[0] for l in self.discrepancias_pontos_check])
-        y_pos = np.arange(len(objects))
-        
-        plt.figure(figsize=(4, 4)) 
-        plt.bar(y_pos, [l[3] for l in self.discrepancias_pontos_check], align='center', alpha=1.0, width=0.8)
-        plt.xticks(y_pos, objects, fontsize=9, rotation=90)
-        plt.grid(axis='y')
-        plt.ylabel('Discrepância (cm)', labelpad=2)
-        plt.title('Discrepâncias Altimétricas')
-        plt.savefig(CAMINHO_ARQUIVO_GRAFICO, dpi=300, bbox_inches = "tight")
-        plt.show()
     
         

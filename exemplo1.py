@@ -3,7 +3,7 @@
 """
 Created on Sat Jul  4 13:04:13 2020
 
-@author: natalia
+@author: Natalia C. de Amorim
 """
 
 from pyPEC import Dados
@@ -46,13 +46,14 @@ print('Qui_Z: ', valores_qui_quadrado[2])
 #============== Gerando os graficos de dispersão das disc. planimétricas
 
 caminho_salvar_grafico = '/home/natalia/Documentos/Mestrado/pyPEC-PCD/exemplo/graficos/Grafico_plan.png'
-dados_metashape.gerar_graficos_tendencia_planimetrica(caminho_salvar_grafico)
+from pyPEC import Plot
+Plot.gerar_graficos_tendencia_planimetrica(caminho_salvar_grafico, dados_metashape.discrepancias_pontos_check)
 
 #============== Gerando os graficos de dispersão das disc. altimétricas
 
 caminho_salvar_grafico_alt = '/home/natalia/Documentos/Mestrado/pyPEC-PCD/exemplo/graficos/Grafico_alt.png'
 
-dados_metashape.gerar_grafico_tendencia_altimetrica(caminho_salvar_grafico_alt)
+Plot.gerar_grafico_tendencia_altimetrica(caminho_salvar_grafico_alt, dados_metashape.discrepancias_pontos_check)
 
 # Desvio padrão amostral
 

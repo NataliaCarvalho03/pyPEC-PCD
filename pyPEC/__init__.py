@@ -3,7 +3,8 @@
 """
 Created on Sat Jul  4 13:33:35 2020
 
-@author: natalia
+@author: Natalia C. de Amorim
 """
 
 from .Dados import Dados
+from .Plot import Plot
